@@ -1,0 +1,6 @@
+development:
+  sessions:
+    default:
+      database: wunderlist
+      hosts:
+        - localhost:27017

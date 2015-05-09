@@ -5,6 +5,7 @@ ruby '2.1.6'
 gem 'mongoid'
 gem 'rack'
 gem 'webmachine'
+gem 'roar'
 gem 'activesupport'
 
 group :development, :test do
