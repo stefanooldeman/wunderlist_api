@@ -7,10 +7,10 @@ class TaskRepresenter < Roar::Decorator
   
   property :id
   property :title
-  property :completed_at
+  property :archived
   property :created_at
 
-  # link :self do
-  #   "/tasks/#{id}"
-  # end
+  link :self do
+    "/tasks/#{represented.id}"
+  end
 end

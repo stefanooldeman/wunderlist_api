@@ -10,7 +10,16 @@ gem 'activesupport'
 
 group :development, :test do
   gem 'pry-byebug'
-  gem 'guard-rspec'
-  gem 'mongoid-rspec'
   gem 'rerun'
+  gem 'guard-rspec'
+end
+
+group :test do
+  gem 'json_spec'
+  gem 'database_cleaner'
+  gem 'mongoid-rspec'
+  # rack-test required for rspec_api_documentation (strange enough)
+  gem 'rack-test'
+  gem 'rspec_api_documentation'
+  gem 'factory_girl'
 end

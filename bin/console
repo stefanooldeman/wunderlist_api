@@ -8,5 +8,7 @@ ENV['RACK_ENV'] = 'development'
 
 require './application'
 
-# Start a web server to serve requests via localhost
-Webmachine.application.run
+# Start a console
+require 'irb'
+ARGV.clear # otherwise all script parameters get passed to IRB
+IRB.start

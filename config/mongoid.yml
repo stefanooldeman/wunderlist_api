@@ -4,3 +4,10 @@ development:
       database: wunderlist
       hosts:
         - localhost:27017
+
+test:
+  sessions:
+    default:
+      database: wunderlist-test
+      hosts:
+        - localhost:27017
