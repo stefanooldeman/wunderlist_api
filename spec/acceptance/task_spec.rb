@@ -35,4 +35,22 @@ resource "Tasks" do
     end
   end
 
+  post "/tasks" do
+    parameter :title, 'Your summary here'
+
+    let(:title) { "So more much todo" }
+    let(:raw_post) { params.to_json }
+    example_request "Creating a task" do
+      expect(response_body).to eq('')
+      location = response_headers["Location"]
+      expect(location).to match(/\/tasks\/[a-z0-9]+$/)
+      expect(status).to eq(201)
+
+      client.get(location)
+      actual = JSON.parse(response_body)
+      expect(actual['title']).to eq("So more much todo")
+      expect(actual['archived']).to be_falsy
+    end
+  end
+
 end

@@ -13,4 +13,8 @@ module TaskRepresenter
   link :self do
     "/tasks/#{id}"
   end
+
+  def href_self
+    self.to_hash['_links']['self']['href']
+  end
 end

@@ -8,8 +8,9 @@ class TaskResource < BaseResource
   end
 
   def create_path
-    TaskRepresenter.from_attributes(:id => 1)
-       .to_json.links[:self]
+    @next_id = BSON::ObjectId.from_time(Time.now.to_f, unique: true)
+    TaskItem.new(id: @next_id).extend(TaskRepresenter)
+      .href_self
   end
 
   def resource_exists?
@@ -25,8 +26,7 @@ class TaskResource < BaseResource
   end
 
   def from_json
-    @result = TaskItem.create!(params.except(:id))
-    to_json
+    TaskItem.create!(params.merge(archived: false, id: @next_id))
   end
   
   def to_json
