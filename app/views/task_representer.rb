@@ -1,9 +1,10 @@
 require 'roar/json'
 require 'roar/decorator'
+require 'roar/json/hal'
 
 class TaskRepresenter < Roar::Decorator
   include Roar::JSON
-  include Roar::Hypermedia
+  include Roar::JSON::HAL
   
   property :id
   property :title

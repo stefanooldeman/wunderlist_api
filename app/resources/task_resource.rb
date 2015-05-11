@@ -13,7 +13,12 @@ class TaskResource < BaseResource
   end
 
   def resource_exists?
-    @result = if params[:id].blank?
+    @result = if params[:id].present?
+      query = TaskItem.where(id: params[:id])
+      if query.exists?
+        TaskRepresenter.new(query.first)
+      end
+    else
       TaskItem.each.map { |model| TaskRepresenter.new(model) }
     end
     @result.present?
@@ -25,6 +30,6 @@ class TaskResource < BaseResource
   end
   
   def to_json
-    { tasks: @result }.to_json
+    @result.to_json
   end
 end
