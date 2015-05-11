@@ -15,16 +15,18 @@ class BaseResource < Webmachine::Resource
   end
 
   def content_types_provided
-    [["application/json", :to_json]]
+    [["application/hal+json", :to_json]]
   end
 
   def content_types_accepted
-    [["application/json", :from_json]]
+    [["application/json", :from_json],
+     ["application/hal+json", :from_json]]
   end
 
   def finish_request
     CORS_HEADERS.each { |k,v| response.headers[k] = v }
 
+    response.headers['Content-Type'] = 'application/hal+json'
     if request.headers[:origin]
       response.headers['Access-Control-Allow-Origin'] = request.headers[:origin]
     end

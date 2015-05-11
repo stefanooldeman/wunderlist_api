@@ -16,10 +16,10 @@ class TaskResource < BaseResource
     @result = if params[:id].present?
       query = TaskItem.where(id: params[:id])
       if query.exists?
-        TaskRepresenter.new(query.first)
+        query.first.extend(TaskRepresenter)
       end
     else
-      TaskItem.each.map { |model| TaskRepresenter.new(model) }
+      TaskList.new(TaskItem.each.to_a).extend(TasksRepresenter)
     end
     @result.present?
   end

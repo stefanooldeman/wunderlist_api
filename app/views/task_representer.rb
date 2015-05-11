@@ -1,8 +1,7 @@
 require 'roar/json'
-require 'roar/decorator'
 require 'roar/json/hal'
 
-class TaskRepresenter < Roar::Decorator
+module TaskRepresenter
   include Roar::JSON
   include Roar::JSON::HAL
   
@@ -12,6 +11,6 @@ class TaskRepresenter < Roar::Decorator
   property :created_at
 
   link :self do
-    "/tasks/#{represented.id}"
+    "/tasks/#{id}"
   end
 end

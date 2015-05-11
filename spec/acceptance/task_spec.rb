@@ -1,22 +1,25 @@
 require 'acceptance_helper'
  
 resource "Tasks" do
-  header "Accept", "application/json"
+  header "Accept", "application/hal+json"
   header "Content-Type", "application/json"
 
   before :all do
     FactoryGirl.create(:task_item, title: 'Watch TV', id: '1a0')
     FactoryGirl.create(:task_item, title: 'Read a book', id: '1b0')
   end
- 
+
   get "/tasks" do
     example "Get all tasks" do
       do_request
  
-      actual = [
-        { title: 'Watch TV', archived: false, _links: { self: {href: '/tasks/1a0'} } },
-        { title: 'Read a book', archived: false, _links: { self: {href: '/tasks/1b0'} } }
-      ]
+      actual = { _embedded: { tasks: [
+            { title: 'Watch TV', archived: false, _links: { self: {href: '/tasks/1a0'} } },
+            { title: 'Read a book', archived: false, _links: { self: {href: '/tasks/1b0'} } }
+          ]
+        },
+        _links: { self: {href: '/tasks'} }
+      }
       expect(response_body).to be_json_eql(actual.to_json)
       expect(status).to eq(200)
     end
