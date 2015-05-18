@@ -10,11 +10,11 @@ resource "Tasks" do
  
       actual = {
         _links: {
-          self: {href: '/'},
-          auth: {href: '/auth'},
-          lists: {href: '/lists'},
-          tasks: {href: '/tasks'},
-          users: {href: '/users'}
+          self: {href: 'http://test.com/'},
+          auth: {href: 'http://test.com/auth'},
+          lists: {href: 'http://test.com/lists'},
+          tasks: {href: 'http://test.com/tasks'},
+          users: {href: 'http://test.com/users'}
         }
       }
       expect(response_body).to be_json_eql(actual.to_json)

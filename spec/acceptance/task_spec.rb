@@ -28,11 +28,11 @@ resource "Tasks" do
       get "/tasks" do
         example_request "Get all tasks" do
           actual = { _embedded: { tasks: [
-                { title: 'Watch TV', archived: false, _links: { self: {href: '/tasks/1a0'} } },
-                { title: 'Read a book', archived: false, _links: { self: {href: '/tasks/1b0'} } }
+                { title: 'Watch TV', archived: false, _links: { self: {href: 'http://test.com/tasks/1a0'} } },
+                { title: 'Read a book', archived: false, _links: { self: {href: 'http://test.com/tasks/1b0'} } }
               ]
             },
-            _links: { self: {href: '/tasks'} }
+            _links: { self: {href: 'http://test.com/tasks'} }
           }
           expect(response_body).to be_json_eql(actual.to_json)
           expect(status).to eq(200)
@@ -41,7 +41,7 @@ resource "Tasks" do
 
       get "/tasks/1b0" do
         example_request "Get one task" do
-          actual = { title: 'Read a book', archived: false, _links: { self: {href: '/tasks/1b0'} } }
+          actual = { title: 'Read a book', archived: false, _links: { self: {href: 'http://test.com/tasks/1b0'} } }
           expect(response_body).to be_json_eql(actual.to_json)
           expect(status).to eq(200)
         end

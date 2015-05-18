@@ -1,0 +1,12 @@
+default: &default
+  server_port: 3000
+  server_host: localhost
+  public_url: bar
+
+development:
+  <<: *default
+  public_url: bar
+
+test:
+  <<: *default
+  public_url: 'http://test.com'

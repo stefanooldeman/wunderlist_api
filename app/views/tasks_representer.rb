@@ -2,12 +2,9 @@ require 'roar/json'
 require 'roar/json/hal'
 
 module TasksRepresenter
-  include Roar::JSON
   include Roar::JSON::HAL
 
-  collection :tasks, class: TaskItem, extend: TaskRepresenter, embedded: true
+  link :self do; Wunderlist.uri(:tasks_representer, :self) end
 
-  link :self do
-    '/tasks'
-  end
+  collection :tasks, class: TaskItem, extend: TaskRepresenter, embedded: true
 end
