@@ -7,7 +7,8 @@ class TaskResource < ModelResource
   protected
 
   def from_json
-    TaskItem.create!(params.merge(archived: false, id: @next_id))
+    @result = TaskItem.create!(params.merge(archived: false, id: @next_id))
+    response.body = to_json
   end
   
   def to_json
