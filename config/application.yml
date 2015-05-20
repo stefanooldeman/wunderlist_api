@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  public_url: bar
+  public_url: 'http://localhost:3000'
 
 test:
   <<: *default

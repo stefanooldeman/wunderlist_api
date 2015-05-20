@@ -1,11 +1,5 @@
 class BaseResource < Webmachine::Resource
 
-  CORS_HEADERS = {
-    'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS', # HEAD, DELETE, PUT
-    'Access-Control-Allow-Headers' => 'Origin, Content-Type, Accept', # Authorization
-    'Access-Control-Allow-Credentials' => 'true'
-  }
-
   def post_is_create?; true; end
   def allow_missing_post?; true; end # equals to resource_exists? return true if params[:id].blank?
 
@@ -24,7 +18,7 @@ class BaseResource < Webmachine::Resource
   end
 
   def finish_request
-    CORS_HEADERS.each { |k,v| response.headers[k] = v }
+    cors_headers.each { |k,v| response.headers[k] = v }
 
     response.headers['Content-Type'] = 'application/hal+json'
     if request.headers[:origin]
@@ -33,6 +27,15 @@ class BaseResource < Webmachine::Resource
   end
 
   protected
+
+  def cors_headers
+    {
+     'Access-Control-Allow-Methods' => allowed_methods,
+     'Allow' => allowed_methods,
+     'Access-Control-Allow-Headers' => 'Origin, Content-Type, Accept', # Authorization
+     'Access-Control-Allow-Credentials' => 'true'
+    }
+  end
 
   def params
     data = if request.body.to_s.present?
