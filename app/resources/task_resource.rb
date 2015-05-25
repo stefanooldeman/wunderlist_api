@@ -1,14 +1,25 @@
 class TaskResource < ModelResource
+  # def trace?; true; end
 
   def allowed_methods
-    ['GET', 'POST', 'OPTIONS']
+    if request.path_info[:id].nil?
+      ['GET', 'POST', 'OPTIONS']
+    else
+      ['GET', 'DELETE', 'OPTIONS']
+    end
+  end
+
+  def delete_resource
+    @result.destroy
+    response.body = @result.extend(TaskRepresenter).to_json
+    true
   end
 
   protected
 
   def from_json
     @result = TaskItem.create!(params.merge(archived: false, id: @next_id))
-    response.body = to_json
+    response.body = @result.extend(TaskRepresenter).to_json
   end
   
   def to_json

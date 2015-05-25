@@ -25,25 +25,55 @@ resource "Tasks" do
         FactoryGirl.create(:task_item, title: 'Read a book', id: '1b0')
       end
 
+      head '/tasks' do
+        example_request 'gives GET and POST' do
+          expect(response_headers['Allow']).to eq("GET\nPOST\nOPTIONS")
+        end
+      end
+
       get "/tasks" do
         example_request "Get all tasks" do
-          actual = { _embedded: { tasks: [
-                { title: 'Watch TV', archived: false, _links: { self: {href: 'http://test.com/tasks/1a0'} } },
-                { title: 'Read a book', archived: false, _links: { self: {href: 'http://test.com/tasks/1b0'} } }
+          actual = {
+            _links: {
+              back: { href: 'http://test.com/' },
+              self: { href: 'http://test.com/tasks' },
+              tasks: [
+                { name: 'Watch TV', href: 'http://test.com/tasks/1a0' },
+                { name: 'Read a book', href: 'http://test.com/tasks/1b0' }
               ]
-            },
-            _links: { self: {href: 'http://test.com/tasks'} }
+            }
           }
           expect(response_body).to be_json_eql(actual.to_json)
           expect(status).to eq(200)
         end
       end
 
+      head '/tasks/1b0' do
+        example_request 'gives GET, POST and DELETE' do
+          expect(response_headers['Allow']).to eq("GET\nDELETE\nOPTIONS")
+        end
+      end
+
       get "/tasks/1b0" do
         example_request "Get one task" do
-          actual = { title: 'Read a book', archived: false, _links: { self: {href: 'http://test.com/tasks/1b0'} } }
+          actual = { title: 'Read a book', archived: false, _links: { self: {href: 'http://test.com/tasks/1b0'}, back: {href: 'http://test.com/tasks'} } }
           expect(response_body).to be_json_eql(actual.to_json)
           expect(status).to eq(200)
+        end
+      end
+
+      delete "/tasks/1b0" do
+        example_request "Remove one task" do
+          actual = {
+            id: '1bo',
+            title: 'Read a book',
+            archived: false,
+          }
+          expect(response_body).to be_json_eql(actual.to_json).excluding('_links')
+          expect(status).to eq(200)
+
+          client.get('/tasks/1b0', {}, headers)
+          expect(status).to eq(404)
         end
       end
     end
@@ -54,7 +84,12 @@ resource "Tasks" do
       let(:title) { "So more much todo" }
       let(:raw_post) { params.to_json }
       example_request "Creating a task" do
-        expect(response_body).to eq('')
+        actual = {
+          archived: false,
+          created_at: '2015-05-25T12:04:53.929+02:00',
+          title: 'So more much todo',
+        }
+        expect(response_body).to be_json_eql(actual.to_json).excluding('_links')
         location = response_headers["Location"]
         expect(location).to match(/\/tasks\/[a-z0-9]+$/)
         expect(status).to eq(201)

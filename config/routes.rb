@@ -21,7 +21,7 @@ Wunderlist.configure do |config|
     auth: '/auth',
     tasks: TASK,
     users: USER,
-    lists: '/lists',
+    archive: '/archive',
   }
 
   config.task_representer = {

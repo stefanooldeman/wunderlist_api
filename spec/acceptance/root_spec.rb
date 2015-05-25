@@ -12,7 +12,7 @@ resource "Tasks" do
         _links: {
           self: {href: 'http://test.com/'},
           auth: {href: 'http://test.com/auth'},
-          lists: {href: 'http://test.com/lists'},
+          archive: {href: 'http://test.com/archive'},
           tasks: {href: 'http://test.com/tasks'},
           users: {href: 'http://test.com/users'}
         }
