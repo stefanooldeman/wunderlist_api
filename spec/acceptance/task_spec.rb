@@ -21,8 +21,8 @@ resource "Tasks" do
 
     context 'Resources exist' do
       before :all do
-        FactoryGirl.create(:task_item, title: 'Watch TV', id: '1a0')
-        FactoryGirl.create(:task_item, title: 'Read a book', id: '1b0')
+        FactoryGirl.create(:task, title: 'Watch TV', id: '1a0')
+        FactoryGirl.create(:task, title: 'Read a book', id: '1b0')
       end
 
       head '/tasks' do

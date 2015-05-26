@@ -1,8 +1,10 @@
 
 class TaskList
-  attr_accessor :tasks
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  def initialize(tasks = [])
-    @tasks = tasks
-  end
+  field :name, type: String
+  field :public, type: Boolean
+  has_many :tasks
+
 end

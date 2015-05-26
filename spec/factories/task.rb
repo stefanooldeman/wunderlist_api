@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :task_item do
+  factory :task do
     title 'Doing something'
     archived false
   end

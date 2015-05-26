@@ -6,7 +6,7 @@ class ModelResource < BaseResource
   end
 
   def resource_exists?
-    @result = if params[:id].present?
+    @result = if params[uid_sym].present?
       find_resource # to_be_implemented
     else
       find_collection # to_be_implemented
@@ -16,6 +16,10 @@ class ModelResource < BaseResource
   
   def to_json
     @result.to_json
+  end
+
+  def uid_sym
+    raise NotImplementedError.new
   end
 end
 

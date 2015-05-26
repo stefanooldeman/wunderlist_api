@@ -5,14 +5,12 @@ resource "Tasks" do
   header "Content-Type", "application/json"
 
   get "/" do
-    example "Get all links" do
-      do_request
- 
+    example_request "Get all links" do
       actual = {
         _links: {
           self: {href: 'http://test.com/'},
           auth: {href: 'http://test.com/auth'},
-          archive: {href: 'http://test.com/archive'},
+          lists: {href: 'http://test.com/lists'},
           tasks: {href: 'http://test.com/tasks'},
           users: {href: 'http://test.com/users'}
         }

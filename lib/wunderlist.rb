@@ -4,10 +4,8 @@ module Wunderlist
   include ActiveSupport::Configurable
 
   def self.uri name, rel
-    # name should be a Hash, Class or Module
-    if name.is_a?(Class)
-      name = name.class.name.underscore.to_sym
-    elsif name.is_a?(Module)
+    # name should be a Hash, or:
+    if name.is_a?(Class) || name.is_a?(Module)
       name = name.name.underscore.to_sym
     end
 
