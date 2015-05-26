@@ -1,1 +1,27 @@
-A wunderlist todo webservice
+# A wunderlist todo webservice
+
+# Requires:
+- ruby-2.2.2
+- mongodb (just install, no setup required)
+- bundler
+
+# Notes
+For now only tasks can be listed, added and deleted. No authorization, users or lists of tassk. etc.
+
+# Further whishes
+
+*Should haves*
+- support for time tracking (updating a tasks time tracking properties with PUT)
+- POST tasks/:id/archive, a custom verb because DELETE is taken (and I believe so far; webmachine only responds with 200 or 204).
+  when someone' archiving a task, I want to respond with 303 status code and give the link to the archive list.
+- GET /lists/:list/tasks I want to reuse the TasksRepresenter under a different webmachine resource, and see how this plays out.
+
+*Could have*
+- Multiple API urls, to experiment with curies and the use of multiple host endpoints.
+  An idea would be to connect a different public API and integrate this into the responses. (Kick ass!)
+  private api's would be a bit difficult; because I want clients to only use 1 authorization method I would have to proxy that endpoint.
+
+*Nice to have*
+- auth. I want to play a bit with oauth2 and see what Grant Type can be used to simplify api usage.
+  this would also require useres and the use of CanCan to support private tasks and lists.
+
