@@ -10,41 +10,37 @@ class ListsResource < ModelResource
     end
   end
 
-  def delete_resource
-    @result.destroy
-    response.body = @result.extend(TaskRepresenter).to_json
-    true
+  def create_path
+    represent_resource(TaskList.new(id: params[uid_sym])).href_self
   end
 
   protected
 
   def from_json
-    @result = TaskItem.create!(params.merge(archived: false, id: @next_id))
-    response.body = @result.extend(TaskRepresenter).to_json
-  end
-  
-  def to_json
-    @result.to_json
-  end
-
-  def href_self
-    TaskList.new(id: @next_id).extend(ListRepresenter)
-      .href_self
+    params[:id] = params.delete(:name)
+    @result = TaskList.create!(params)
+    response.body = represent_resource(@result).to_json
   end
 
   def find_resource
-    query = TaskList.where(name: params[uid_sym])
-    if query.exists?
-      query.first.extend(ListRepresenter)
-    end
+    TaskList.where(id: params[uid_sym])
+  end
+
+  def represent_resource(record)
+    record.extend(ListRepresenter)
   end
 
   def find_collection
-    TaskList.where(name: 'archive', public: true).first_or_create
-    records = TaskList.each.to_a
-    unless records.empty?
-      collection = OpenStruct.new(lists: records)
-      collection.extend(ListsRepresenter)
-    end
+    # todo arcehive should move to a different resource.rb
+    # a.t.m. doing a remove and then get to /lists/archive would fail..
+    # also the archive behaves different than other lists.
+    # - It should filter tasks on the archive property
+    # - It cannot be deleted
+    TaskList.where(id: 'archive', public: true).first_or_create
+    TaskList.each.to_a
+  end
+
+  def represent_collection(records)
+    OpenStruct.new(lists: records).extend(ListsRepresenter)
   end
 end

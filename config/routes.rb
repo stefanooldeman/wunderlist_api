@@ -13,8 +13,8 @@ Webmachine.application.routes do
 
   add [LIST], ListsResource
   add [LIST, :list_id], ListsResource
-  add [LIST, :list_id, TASK], TaskResource
-  add [LIST, :list_id, TASK, :task_id], TaskResource
+  add [LIST, :list_id, TASK], Lists::TaskResource
+  add [LIST, :list_id, TASK, :task_id], Lists::TaskResource
 
   # TODO only in development?!
   add ['trace', :*], Webmachine::Trace::TraceResource
@@ -39,8 +39,9 @@ Wunderlist.configure do |config|
   }
 
   config.list_representer = {
-    self: "#{LIST}/:list",
-    tasks: "#{LIST}/:list/tasks"
+    self: "#{LIST}/:list_id",
+    task: "#{LIST}/:list_id/tasks/:task_id",
+    tasks: "#{LIST}/:list_id/tasks"
   }
 
   config.lists_representer = {

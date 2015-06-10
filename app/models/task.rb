@@ -11,7 +11,6 @@ class Task
 
   belongs_to :task_list
 
-  def id
-    self._id.to_s
-  end
+  def id; _id.to_s end
+  def list_id; task_list_id end
 end

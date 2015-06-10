@@ -4,6 +4,7 @@ resource "Tasks" do
   header "Accept", "application/hal+json"
   header "Content-Type", "application/json"
 
+
   context 'User unauthorized' do
     context 'Resources do not exist' do
       get "/tasks" do
@@ -24,6 +25,7 @@ resource "Tasks" do
         FactoryGirl.create(:task, title: 'Watch TV', id: '1a0')
         FactoryGirl.create(:task, title: 'Read a book', id: '1b0')
       end
+      after(:all) {Task.all.to_a.each { |x| x.destroy } }
 
       head '/tasks' do
         example_request 'gives GET and POST' do

@@ -3,8 +3,12 @@ class TaskList
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :name, type: String
+  alias_method :name, :id
   field :public, type: Boolean
   has_many :tasks
+
+  def name=(name)
+    self.id = name
+  end
 
 end

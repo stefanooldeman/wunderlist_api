@@ -25,6 +25,22 @@ resource "Lists" do
     end
   end
 
+  post "/lists" do
+    parameter :name, 'foobar'
+
+    let(:name) { "foobar" }
+    let(:raw_post) { params.to_json }
+    example_request "Create a ists" do
+
+      actual = {
+        name: name,
+        public: true
+      }
+      expect(response_body).to be_json_eql(actual.to_json).excluding('_links')
+      expect(status).to eq(201)
+    end
+  end
+
   head '/lists/archive' do
     example_request 'gives GET and POST' do
       expect(response_headers['Allow']).to eq("GET\nDELETE\nOPTIONS")
@@ -58,8 +74,9 @@ resource "Lists" do
       list = FactoryGirl.create(:task_list, name: 'shit-grownups-say', public: true)
       list.tasks << task_1
       list.tasks << task_2
-
     end
+    after(:all) {Task.all.to_a.each { |x| x.destroy } }
+
     get '/lists/shit-grownups-say' do
       example_request 'Get all tasks in a list' do
         actual = {
@@ -82,12 +99,12 @@ resource "Lists" do
     get '/lists/shit-grownups-say/tasks/2b0' do
       example_request 'Get a task that belongs to a list' do
         actual = {
-          id: "2a0",
+          id: "2b0",
           archived: false,
           created_at: "2015-05-27T00:32:21.125+02:00",
-          title: "Be someone",
+          title: "Mean something",
           _links: {
-            self: {href: "http://test.com/lists/shit-grownups-say/tasks/2a0"},
+            self: {href: "http://test.com/lists/shit-grownups-say/tasks/2b0"},
             back: {href: "http://test.com/lists/shit-grownups-say/tasks"}
           }
         }
@@ -100,8 +117,8 @@ resource "Lists" do
       example_request "Get all tasks" do
         actual = {
           _links: {
-            back: { href: 'http://test.com/lists' },
-            self: { href: 'http://test.com/lists/archive' },
+            back: { href: 'http://test.com/lists/archive' },
+            self: { href: 'http://test.com/lists/archive/tasks' },
             tasks: []
           }
         }

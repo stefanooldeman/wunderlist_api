@@ -9,10 +9,10 @@ module ListRepresenter
   property :created_at
 
   link :back do; Wunderlist.uri(ListsRepresenter, :self) end
-  link :self do; Wunderlist.uri(ListRepresenter, :self).gsub(':list', name) end
+  link :self do; Wunderlist.uri(ListRepresenter, :self).gsub(':list_id', name) end
   links :tasks do
     self.tasks.map do |task_item|
-      task_item.extend(TaskRepresenter)
+      task_item.extend(Lists::TaskRepresenter)
       { name: task_item.title, href: task_item.href_self }
     end
   end

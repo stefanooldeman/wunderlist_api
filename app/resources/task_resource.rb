@@ -1,5 +1,5 @@
 class TaskResource < ModelResource
-  # def trace?; true; end
+
   def uid_sym; :task_id end
 
   def allowed_methods
@@ -10,17 +10,11 @@ class TaskResource < ModelResource
     end
   end
 
-  def delete_resource
-    @result.destroy
-    response.body = @result.extend(TaskRepresenter).to_json
-    true
-  end
-
   protected
 
   def from_json
     @result = Task.create!(params.merge(archived: false, id: @next_id))
-    response.body = @result.extend(TaskRepresenter).to_json
+    response.body = represent_resource(@result).to_json
   end
   
   def to_json
@@ -28,22 +22,22 @@ class TaskResource < ModelResource
   end
 
   def href_self
-    Task.new(id: @next_id).extend(TaskRepresenter)
-      .href_self
+    represent_resource(Task.new(id: @next_id)).href_self
   end
 
   def find_resource
-    query = Task.where(id: params[uid_sym])
-    if query.exists?
-      query.first.extend(TaskRepresenter)
-    end
+    Task.where(id: params[uid_sym])
+  end
+
+  def represent_resource(record)
+    record.extend(TaskRepresenter)
   end
 
   def find_collection
-    records = Task.each.to_a
-    unless records.empty?
-      collection = OpenStruct.new(tasks: records)
-      collection.extend(TasksRepresenter)
-    end
+    Task.each.to_a
+  end
+
+  def represent_collection(records)
+    OpenStruct.new(tasks: records).extend(TasksRepresenter)
   end
 end
